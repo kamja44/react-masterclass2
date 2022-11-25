@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { StringLiteral } from "typescript";
+import React from "react";
 
 interface ContainerProps{
     bgColor: string;
@@ -8,7 +9,6 @@ interface ContainerProps{
 interface CircleProps{
     bgColor: string;
     borderColor?: string;
-    text ?: string;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -19,11 +19,13 @@ const Container = styled.div<ContainerProps>`
     border: 1px solid ${props => props.borderColor};
 `
 
-function Circle({bgColor, borderColor, text = "default Value"}: CircleProps){
+function Circle({bgColor, borderColor}: CircleProps){
+    const [value, setValue] = React.useState<number | string>(0);
+    setValue(2)
+    setValue("hello")
     return(
         //  ?? <- 기본값 설정
         <Container bgColor={bgColor} borderColor={borderColor ?? bgColor}> 
-            {text}
         </Container>
     );
 }
