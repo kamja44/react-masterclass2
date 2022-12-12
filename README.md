@@ -22,3 +22,22 @@ Theme 관련 파일
 
 - styled.d.ts <- theme 모듈 설정
 - theme.ts <- 색 설정
+
+  5.3
+
+interface
+
+- typeScript에게 data의 type 설명
+
+useEffect
+
+- component의 시작과 끝 등 특정한 상황에서만 function 실행
+
+()()
+
+- 즉시 실행 함수
+  (() => console.log(1))() <- console.log(1)바로 실행
+
+[].slice(0,100)
+
+- 배열을 0부터 100까지 자르기

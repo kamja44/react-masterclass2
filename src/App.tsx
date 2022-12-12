@@ -63,10 +63,11 @@ table {
 body {
   font-family: 'NEXON Lv1 Gothic OTF';
   background-color:${(props) => props.theme.bgColor};
-  color:${(props) => props.theme.textColor}
+  color:${(props) => props.theme.textColor};
 }
 a {
   text-decoration:none;
+  color:inherit;
 }
 `;
 
