@@ -17,13 +17,14 @@ const CoinsList = styled.ul``;
 const Coin = styled.li`
   background-color: white;
   color: ${(props) => props.theme.bgColor};
-  padding: 20px;
   border-radius: 15px;
   margin-bottom: 10px;
   font-weight: bold;
   a {
     transition: color 0.2s ease-in;
-    display: block;
+    padding: 20px;
+    display: flex;
+    align-items: center;
   }
   &:hover {
     a {
@@ -38,6 +39,11 @@ const Title = styled.h1`
 const Loader = styled.span`
   text-align: center;
   display: block;
+`;
+const Img = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
 `;
 interface CoinInterface {
   id: string;
@@ -73,7 +79,19 @@ function Coins() {
         <CoinsList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/:${coin.id}`}>{coin.name} &rarr;</Link>
+              {/* Link = HTML의 a태그 즉, Coin의 a태그 */}
+              {/* 5.4 */}
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: { name: coin.name },
+                }}
+              >
+                <Img
+                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinsList>

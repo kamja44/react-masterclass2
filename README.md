@@ -41,3 +41,13 @@ useEffect
 [].slice(0,100)
 
 - 배열을 0부터 100까지 자르기
+
+  5.4
+  Link의 to로 데이터 보내기
+
+- state 안에 object 형태로 데이터 보낼 수 있음
+- 보낸 데이터를 useLocation()함수를 이용하여 받을 수 있음
+
+  Link 클릭 시 페이지 이동 안되는 오류
+
+- index.tsx 페이지의 <React.StrictMode></React.StrictMode>제거
