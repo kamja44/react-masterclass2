@@ -39,9 +39,7 @@ footer, header, hgroup, main, menu, nav, section {
 *[hidden] {
     display: none;
 }
-body {
-  line-height: 1;
-}
+
 menu, ol, ul {
   list-style: none;
 }
@@ -64,6 +62,9 @@ body {
   font-family: 'NEXON Lv1 Gothic OTF';
   background-color:${(props) => props.theme.bgColor};
   color:${(props) => props.theme.textColor};
+  line-height: 1.2;
+  font-weight: bold;
+  
 }
 a {
   text-decoration:none;

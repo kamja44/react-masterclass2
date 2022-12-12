@@ -56,4 +56,25 @@ useEffect
   5.5
 
 - capsulation(캡슐화)
-- useEffect(,[])의 [] <- useEffect 생성 시 empty array 생성을 의미한다.
+- useEffect(,[])의 [] <- 코드를 한번만 실행하기 위해 사용(no dependencies를 의미한다.)
+- hooks의 최상의 성능을 위해서 [] 안에 dependency를 넣어야한다(coinId)
+- 안에 넣든 말든 결과는 같음
+
+  5.7
+  nested router
+
+- router안에 있는 또 다른 router
+
+switch
+
+- 2가지 router를 render할 때 한 번에 하나의 router만 render 할 때 사용
+
+Route
+
+- Route는 path를 반드시 가져야 한다.
+
+  5.8
+  Route의 path 입력 시 /아무변수/price 이렇게 입력해도 알아서 경로 찾는다.
+  useRouteMatch
+
+- 사용자가 특정한 URL에 있는지의 여부 반환
