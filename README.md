@@ -32,6 +32,7 @@ interface
 useEffect
 
 - component의 시작과 끝 등 특정한 상황에서만 function 실행
+- 즉, component가 생성될 때 한번만 코드 실행
 
 ()()
 
@@ -51,3 +52,8 @@ useEffect
   Link 클릭 시 페이지 이동 안되는 오류
 
 - index.tsx 페이지의 <React.StrictMode></React.StrictMode>제거
+
+  5.5
+
+- capsulation(캡슐화)
+- useEffect(,[])의 [] <- useEffect 생성 시 empty array 생성을 의미한다.
