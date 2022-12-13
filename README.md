@@ -78,3 +78,31 @@ Route
   useRouteMatch
 
 - 사용자가 특정한 URL에 있는지의 여부 반환
+
+  5.9
+  npm i react-query
+  <React Query>
+
+- react query는 데이터를 캐시에 저장한다.
+  useQuery <- 2개의 argument필요
+
+- useQuery(queryKey, fetchFunction)
+- queryKey = query의 고유식별자
+
+useQuery hook 동작과정
+
+1. fetchFunction을 이용하여 fetch함수 호출
+2. fetch함수가 loading중이라면 react query가 로딩중임을 알려준다. <- isLoading
+3. 로딩이 끝나면 fetch함수의 결과를 data 매개변수에 담는다.
+
+5.10
+React Query Devtools 사용법(설정법)
+index.tsx 파일에
+import { ReactQueryDevtools } from "react-query/devtools";
+<ReactQueryDevtools initialIsOpen={true} />
+
+- 각각의 React Query는 고유한 ID(unique key)를 가지고 있어야 한다.
+
+isLoading: infoLoading
+
+- isLoading변수를 infoLoading이라는 이름으로 부르겠다.

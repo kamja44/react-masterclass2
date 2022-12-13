@@ -1,8 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./router";
-
+// 5.10
+import { ReactQueryDevtools } from "react-query/devtools";
 // RESET CSS
-
 const GlobalStyle = createGlobalStyle`
 @font-face {
   font-family: 'NEXON Lv1 Gothic OTF';
@@ -78,6 +78,8 @@ function App() {
     <>
       <GlobalStyle />
       <Router />
+      {/* 5.10 */}
+      <ReactQueryDevtools initialIsOpen={true} />
     </>
   );
 }

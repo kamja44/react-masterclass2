@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useQuery } from "react-query";
 import React, { useState, useEffect } from "react";
+import { fetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -45,7 +47,7 @@ const Img = styled.img`
   height: 25px;
   margin-right: 10px;
 `;
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -55,29 +57,30 @@ interface CoinInterface {
   type: string;
 }
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    // ()() <- 즉시 실행 함수 5.3
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await response.json();
-      // 5.3
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
-  console.log(coins);
+  // 5.9
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
+  // const [coins, setCoins] = useState<ICoin[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   // ()() <- 즉시 실행 함수 5.3
+  //   (async () => {
+  //     const response = await fetch("https://api.coinpaprika.com/v1/coins");
+  //     const json = await response.json();
+  //     // 5.3
+  //     setCoins(json.slice(0, 100));
+  //     setLoading(false);
+  //   })();
+  // }, []);
   return (
     <Container>
       <Header>
         <Title>코인</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 200).map((coin) => (
             <Coin key={coin.id}>
               {/* Link = HTML의 a태그 즉, Coin의 a태그 */}
               {/* 5.4 */}
