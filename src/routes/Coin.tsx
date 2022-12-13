@@ -27,6 +27,12 @@ const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
 `;
+const HomeBtn = styled.div`
+  margin-left: 20px;
+  margin-top: 20px;
+  padding: 5px;
+  font-size: 20px;
+`;
 const Loader = styled.span`
   text-align: center;
   display: block;
@@ -172,6 +178,9 @@ function Coin() {
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <HomeBtn>
+          <Link to={`/`}>🎪</Link>
+        </HomeBtn>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>

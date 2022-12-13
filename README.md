@@ -106,3 +106,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 isLoading: infoLoading
 
 - isLoading변수를 infoLoading이라는 이름으로 부르겠다.
+
+  5.11
+  install APEX CHART
+  JS CHART LIBRARY
+  npm i --save react-apexcharts apexcharts
