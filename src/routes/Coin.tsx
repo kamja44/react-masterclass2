@@ -79,7 +79,6 @@ const Tab = styled.span<{ isActive: boolean }>`
     display: block;
   }
 `;
-
 interface RouteParams {
   coinId: string;
 }
@@ -153,9 +152,10 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", coinId],
-    () => fetchCoinTickers(coinId),
-    // 5.15
-    { refetchInterval: 5000 }
+    () => fetchCoinTickers(coinId)
+  );
+  /* 5.15
+    // { refetchInterval: 5000 }
   );
   // const [loading, setLoading] = useState(true);
   // const [info, setInfo] = useState<InfoData>();
@@ -174,6 +174,7 @@ function Coin() {
   //     setLoading(false);
   //   })();
   // }, [coinId]); // 5.5
+  */
   const loading = infoLoading || tickersLoading;
   return (
     <Container>

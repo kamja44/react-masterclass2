@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "../api";
+import { useLocation } from "react-router-dom";
 import ApexChart from "react-apexcharts";
-import Price from "./Price";
 interface CharProps {
   coinId: string;
 }
@@ -15,14 +15,17 @@ interface IHistorical {
   volume: string;
   market_cap: number;
 }
+interface IParams {
+  params: string;
+}
 function Chart({ coinId }: CharProps) {
   const { isLoading, data } = useQuery<IHistorical[]>(
     ["ohlcv", coinId],
-    () => fetchCoinHistory(coinId),
+    () => fetchCoinHistory(coinId)
     // 5.15
-    {
-      refetchInterval: 10000,
-    }
+    // {
+    //   refetchInterval: 10000,
+    // }
   );
   return (
     <div>
@@ -30,58 +33,35 @@ function Chart({ coinId }: CharProps) {
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
-          series={[
-            {
-              data: data?.map((price) => parseFloat(price.close)) ?? [],
-              name: "Price",
-            },
-          ]}
-          options={{
-            theme: {
-              mode: "dark",
-            },
-            chart: {
-              background: "576574",
-              height: 500,
-              width: 500,
-              toolbar: {
-                show: false,
+          type="candlestick"
+          series={
+            [
+              {
+                name: "price",
+                data: data?.map((value) => {
+                  return {
+                    x: new Date(value.time_open * 1000)
+                      .toISOString()
+                      .substring(0, 10),
+                    y: [value.open, value.high, value.low, value.close],
+                  };
+                }),
               },
+            ] as any
+          }
+          options={{
+            chart: {
+              type: "candlestick",
             },
-            grid: {
-              show: false,
+            title: {
+              text: "Coin Chart",
+              align: "center",
             },
-            yaxis: {
-              show: false,
+            tooltip: {
+              enabled: false,
             },
             xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: {
-                show: false,
-              },
-              categories: data?.map((price) =>
-                new Date(price.time_close * 1000).toUTCString()
-              ),
               type: "datetime",
-            },
-            fill: {
-              type: "gradient",
-              gradient: {
-                gradientToColors: ["#0be881"],
-                stops: [0, 100],
-              },
-            },
-            colors: ["#0fbcf9"],
-            tooltip: {
-              y: {
-                formatter: (value) => `$${value.toFixed(2)}`,
-              },
-            },
-            stroke: {
-              curve: "smooth",
-              width: 5,
             },
           }}
         />
