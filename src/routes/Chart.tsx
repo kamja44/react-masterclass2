@@ -56,18 +56,22 @@ function Chart({ coinId }: CharProps) {
               labels: {
                 show: false,
               },
+              categories: data?.map((price) =>
+                new Date(price.time_close * 1000).toUTCString()
+              ),
+              type: "datetime",
             },
             fill: {
               type: "gradient",
               gradient: {
-                gradientToColors: ["blue"],
+                gradientToColors: ["#0be881"],
                 stops: [0, 100],
               },
             },
-            colors: ["red"],
+            colors: ["#0fbcf9"],
             tooltip: {
               y: {
-                formatter: (value) => `$${value.toFixed(3)}`,
+                formatter: (value) => `$${value.toFixed(2)}`,
               },
             },
             stroke: {
