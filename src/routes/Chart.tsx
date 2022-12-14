@@ -16,8 +16,13 @@ interface IHistorical {
   market_cap: number;
 }
 function Chart({ coinId }: CharProps) {
-  const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
-    fetchCoinHistory(coinId)
+  const { isLoading, data } = useQuery<IHistorical[]>(
+    ["ohlcv", coinId],
+    () => fetchCoinHistory(coinId),
+    // 5.15
+    {
+      refetchInterval: 10000,
+    }
   );
   return (
     <div>

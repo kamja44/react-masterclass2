@@ -111,3 +111,15 @@ isLoading: infoLoading
   install APEX CHART
   JS CHART LIBRARY
   npm i --save react-apexcharts apexcharts
+
+  5.15
+  useQuery의 3번째 argument
+
+- refetchInterval <- 5초마다 query를 refetch한다
+
+  npm i react-helmet
+  npm i --save-dev @types/react-helmet
+
+- react-helmet은 component이다.
+- 여기서 무엇을 render하던 그게 문서의 head로 간다.
+- 즉, title, meta, favicon, css 등, 문서의 head를 조작할 때 사용한다.
