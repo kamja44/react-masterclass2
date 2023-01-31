@@ -189,3 +189,60 @@ return (
 ### 2.4절에서는 compoenet안에서 element를 선택하여 element가 변경될 경우 componenet안의 element도 수정했어야 했는데 Emoji 컴포넌트를 생성하여 Box 컴포넌트 안에서 Emoji 컴포넌트를 선택하여 element를 변경할 경우 component만 변경하면 되도록 설정
 
 - 이 방식은 styled component에서만 가능하다.
+
+# 2.7
+
+Theme
+
+### index.js
+
+```
+import {ThemeProvider} from "styled-components";
+
+const darkTheme = {
+  textColor: "whitesmoke",
+  backgroundColor:"#111",
+}
+const lightTheme={
+  textColor: "#111",
+  backgroundColor:"whitesmoke",
+}
+
+ReactDOM.render(
+  <ThemeProvider theme={darkTheme}>
+    <App />
+  </ThemeProvider>
+)
+```
+
+### App.js
+
+```
+  const Title = styled.h1`
+    color: ${props => props.theme.textColor}
+  `;
+  const Wrapper = styled.div`
+  display:flex;
+  justify-content:center;
+  height:100vh;
+  align-items:center;
+  `;
+  function App(){
+    return(
+      <Wrapper>
+        <Title>Title</Title>
+      </Wrapper>
+    )
+  }
+```
+
+- App component는 ThemeProvider 안에 있기 때문에 App 컴포넌트 안에 있는 컴포넌트들은 ThemeProvider의 theme color에 접근할 수 있다.
+  - App component의 Title component는 theme의 textColor or backgroundColor에 접근할 수 있다.
+  - 접근방법은 다음과 같다.
+    - `color: ${props => props.theme.textColor};`
+- App component의 Wrapper도 theme color에 접근할 수 있다.
+  - App component의 Wrapper component는 theme의 textColor or backgroundColor에 접근할 수 있다.
+  - 접근방법은 다음과 같다.
+    - `background-color:${props => props.theme.backgroundColor};`
+
+`즉 ,ThemeProvider에 둘러쌓인 모든 compoenet들은 theme에 접근할 수 있다.`
