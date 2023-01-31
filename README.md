@@ -110,3 +110,54 @@ return(
 ```
 
 - styled.input.attrs({})를 사용하면 모든 Input 컴포넌트를 생성할 때 required: true 속성을 추가한다.
+
+# 2.4
+
+## styled component 안에서 animation 추가
+
+```
+import {keyframes} from "styled-components";
+const animation = keyframes`
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
+const Box styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: tomato;
+  animation: ${animation} 1s linear infinite;
+`
+```
+
+- animation은 styled-components의 {keyframes}를 import하여 사용할 수 있다.
+  - component의 animation: ${animation} 1s linear infinite는 const animation = keyframes을 1초동안 linear로 무한대로 반복하겠다는 뜻이다.
+
+#### component안의 element 선택하기
+
+```
+const Box = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: tomato;
+  animation: ${animation} 1s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span{
+    font-size: 36px;
+    &:hover{
+      color:white;
+    }
+  }
+`;
+<Box>
+    <span>q(≧▽≦q)</span>
+</Box>
+```
+
+- Box styled-component안에 span을 작성하여 Box 컴포넌트 안의 span element를 선택할 수 있다.
+  - span 안의 &연산자는 자기자신을 가르킨다. 즉, &:hover{}는 span:hover{}와 같다.

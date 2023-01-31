@@ -1,29 +1,39 @@
-import styled from "styled-components";
-const Father = styled.div`
+import styled, { keyframes } from "styled-components";
+const Wrapper = styled.div`
   display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
 `;
-const Btn = styled.button`
-  color: white;
+const animation = keyframes`
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
+const Box = styled.div`
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
   background-color: tomato;
-  border: 0;
-  border-radius: 15px;
-`;
-const Input = styled.input.atters({ required: true })`
-  background-color: black;
+  animation: ${animation} 2s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 40px;
+    color: white;
+  }
 `;
 function App() {
   return (
-    <Father>
-      <Btn>Log In</Btn>
-      <Btn as="a" href="#">
-        Log In
-      </Btn>
-      <Input />
-      <Input />
-      <Input />
-      <Input />
-      <Input />
-    </Father>
+    <Wrapper>
+      <Box>
+        <span>q(≧▽≦q)</span>
+      </Box>
+    </Wrapper>
   );
 }
 export default App;
