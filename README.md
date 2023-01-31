@@ -70,3 +70,43 @@ const Circle = styled(Box)`
 ```
 
 - styled(Box)의 의미란 Box의 모든 속성들을 들고 온 다음 추가적으로 백틱(``)안의 내용을 추가한다.
+
+# 2.3
+
+## 컴포넌트의 태그를 바꾸고 싶은데 스타일은 바꾸고 싶지 않을 때
+
+```
+const Btn = styled.button`
+  color: white;
+  background-color: tomato;
+  border: 0;
+  border-radius: 15px;
+`;
+  return (
+    <Father>
+      <Btn>Log In</Btn>
+      <Btn as="a" href="#">Log In</Btn>
+    </Father>
+  );
+```
+
+- 스타일은 유지하며 컴포넌트의 태그를 바꾸고 싶을 때 컴포넌트에 as= "바꾸고 싶은 태그"를 추가하여 태그를 변경한다.
+
+* 컴포넌트에서 HTML의 속성 추가가 가능하다.
+
+#### styled components가 컴포넌트를 생성할 때, 속성값을 설정할 수 있다.
+
+```
+const Input = styled.input.attrs({required: true})`
+  background-color: tomato;
+`
+return(
+  <Input />
+  <Input />
+  <Input />
+  <Input />
+  <Input />
+)
+```
+
+- styled.input.attrs({})를 사용하면 모든 Input 컴포넌트를 생성할 때 required: true 속성을 추가한다.
