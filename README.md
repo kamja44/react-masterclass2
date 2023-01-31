@@ -161,3 +161,31 @@ const Box = styled.div`
 
 - Box styled-component안에 span을 작성하여 Box 컴포넌트 안의 span element를 선택할 수 있다.
   - span 안의 &연산자는 자기자신을 가르킨다. 즉, &:hover{}는 span:hover{}와 같다.
+
+# 2.5
+
+```
+const Emoji = styled.span`
+  font-size: 40px;
+`;
+const Box = styled.div`
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+  background-color: tomato;
+  ${Emoji}{
+    &:hover{
+      color:white;
+    }
+  }
+`
+return (
+  <Box>
+    <Emoji>q(≧▽≦q)</Emoji>
+  </Box>
+)
+```
+
+### 2.4절에서는 compoenet안에서 element를 선택하여 element가 변경될 경우 componenet안의 element도 수정했어야 했는데 Emoji 컴포넌트를 생성하여 Box 컴포넌트 안에서 Emoji 컴포넌트를 선택하여 element를 변경할 경우 component만 변경하면 되도록 설정
+
+- 이 방식은 styled component에서만 가능하다.

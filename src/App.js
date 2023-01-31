@@ -13,6 +13,9 @@ const animation = keyframes`
     transform: rotate(360deg);
   }
 `;
+const Emoji = styled.span`
+  font-size: 40px;
+`;
 const Box = styled.div`
   border-radius: 50%;
   height: 200px;
@@ -22,16 +25,17 @@ const Box = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  span {
-    font-size: 40px;
-    color: white;
+  ${Emoji} {
+    &:hover {
+      color: white;
+    }
   }
 `;
 function App() {
   return (
     <Wrapper>
       <Box>
-        <span>q(≧▽≦q)</span>
+        <Emoji>q(≧▽≦q)</Emoji>
       </Box>
     </Wrapper>
   );
