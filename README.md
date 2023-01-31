@@ -1,4 +1,4 @@
-#
+# 2.1
 
 ## styled-component설치
 
@@ -21,3 +21,52 @@ function App(){
 
 - styled.div에서 div대신 HTML tag사용이 가능하다.
 - style component안(백틱 안(``안))에는 CSS코드가 들어간다.
+
+# 2.2
+
+## props
+
+- 컴포넌트에 데이터를 보내는 방법
+
+#### props 사용법
+
+##### App
+
+```
+return(
+  <Father>
+    <Box bgcolor="teal">
+    <Box bgcolor="tomato">
+  </Father>
+)
+```
+
+- <Box>에서 보내준 props들을 컴포넌트(const Box)에서 받아줘야한다.
+- background-color: ${props => props.bgColor};
+
+##### Box
+
+```
+  const Box = styled.div`
+  background-color: ${props => props.bgColor};
+  width:100px;
+  height:100px;
+  `
+```
+
+- return에 있는 props(bgColor)와 컴포넌트에서 사용할 props(${props => props.bgColor}})의 이름이 같아야 한다.
+
+#### 컴포넌트 상속
+
+```
+const Box = styled.div`
+  background-color: ${props => props.bgColor};
+  width:100px;
+  height:100px;
+  `
+const Circle = styled(Box)`
+  border-radius: 50px;
+`
+```
+
+- styled(Box)의 의미란 Box의 모든 속성들을 들고 온 다음 추가적으로 백틱(``)안의 내용을 추가한다.
