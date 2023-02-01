@@ -260,3 +260,26 @@ ReactDOM.render(
 
 - a와 b에 number가 아니 다른형이 들어가면 에러발생
 - 코드에 에러가 있다면, 프로그램이 작동하기 전에 TypeScript가 에러를 알려준다.
+
+# 3.1
+
+- TypeScript 설치
+
+1. 방법 1
+
+- npx create-react-app 내 앱 이름 --template typescript
+  - create-react-app을 이용하여 새로운 react app 생성
+
+2. 방법 2
+
+- npm i --save typescript @types/node @types/react @types/react-dom @types/jest
+
+`타입스크립트 파일의 확장자명은 ts이다.`
+`타입스크립트를 사용하는 react파일의 확장자면은 tsx이다.`
+
+어떤 라이브러리나 패키지는 TypeScript로 만들어진게 아니다.
+
+- 즉, typeScript로 만들어진 패키지로 설치해야한다.
+- npm i --save-dev @types/styled-components
+  - styled-components를 typescript 형식으로 정의한 라이브러리 설치
+  - 유명한 라이브러리들은 @types에 정의되어있다.
