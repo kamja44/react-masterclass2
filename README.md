@@ -283,3 +283,125 @@ ReactDOM.render(
 - npm i --save-dev @types/styled-components
   - styled-components를 typescript 형식으로 정의한 라이브러리 설치
   - 유명한 라이브러리들은 @types에 정의되어있다.
+
+### propTypes와 TypeScript의 차이점
+
+propTepes는 prop이 있는지 없는지 확인해주지만, `코드를 실행한 후`에만 확인할 수 있다.
+TypeScript는 `코드가 실행되기 전`에 오류를 확인할 수 있다.
+
+#### component의 prop에 접ㄱㄴ할 수 있는 방법
+
+Circle.tsx
+
+```TypeScript
+const Container = styled.div``;
+function Circle({bgColor}){
+  return <Container />;
+}
+export default Circle
+```
+
+App.tsx
+
+```TypeScript
+  function App(){
+    return(
+      <div>
+      <Circle bgColor="teal" />
+      <Circle bgColor="coral" />
+      </div>
+    )
+  }
+```
+
+#### TypeScript의 interface
+
+- object의 모양을 TypeScript에게 설명한다.
+  - 즉, interface는 object를 설명해준다.
+
+```TypeScript
+interface ContainerProps{
+  bgColor: string;
+}
+interface CircleProps{
+  bgColor: string;
+}
+/*
+ 생성한 interface(CircleProps)의 타입이 뭔지 component({bgcolor})에게 말해줘야 한다.
+ function Circle({bgcolor}: CircleProps){}
+ 즉, bgColor의 타입은 CircleProps의 object라는걸 명시한다.
+ */
+/*
+  <Container />는 div태그이다. 하지만, Container component는 어떤 props도 받고 있지 않다.
+  즉, TypeScript에게 bgColor를 styled-component에게도 보내고 싶다고 말해야한다. <- 새로운 interface인 ContainerProps를 생성하여 전달한다.
+
+
+  이 경우 ContainerProps와 Circleprops는 둘다 하나의 prop(bgColor)을 보낸다는 점에서 같다.
+  생성한 ContainerProps interface를 Container component에 아래와 같이 추가한다.
+  const Container = styled.div<ContainerProps>``;
+*/
+// 즉, styled.div<ContainerProps>``;이 코드는 TypeScript에게 Container가 bgColor(ContainerProps interface)를 받을거라고 명시하는 코드이다.
+const Container = styled.div<ContainerProps>`
+  width: 200px;
+  height: 200px;
+  background-color: ${(props) => props.bgColor}
+`;
+function Circle({bgColor}: CircleProps){
+  return <Container bgColor={bgColor}/>;
+}
+```
+
+## interface 요약
+
+```Typescript
+interface PlayerShape{
+  name:string;
+  age:number;
+}
+const sayHello = (playerObj:PlayerShape) => `Hello ${playerObj.name} you are ${playerObj.age} years old.`
+
+sayHello({name:"kamja", age:"age"}) // age가 string이기 때문에 에러 발생
+sayHello({name:"kamja", age:12,hello:1}) // hello는 PlayerShape에 정의되어 있지 않기에 에러 발생
+```
+
+- `interface는 TypeScript와 코드가 실행되기 전에 확인한다.`
+- `Prop Types는 코드 실행 후 브라우저에 에러로 표시된다.`
+
+- 코드 1 [ContainerProps와 CircleProps를 통합]
+
+```TypeScript
+  interface CircleProps {
+    bgColor: string;
+  }
+  const Container = styled.div<CircleProps>`
+    width: 200px;
+    height: 200px;
+    background-color: ${(props) => props.bgColor};
+    border-radius: 50%;
+  `;
+function Circle({ bgColor }: CircleProps) {
+  return <Container bgColor={bgColor} />;
+}
+```
+
+- 코드 2 [ContainerProps와 CircleProps를 분리]
+
+```TypeScript
+interface ContainerProps {
+  bgColor: string;
+}
+interface CircleProps {
+  bgColor: string;
+}
+const Container = styled.div<ContainerProps>`
+  width: 200px;
+  height: 200px;
+  background-color: ${(props) => props.bgColor};
+  border-radius: 50%;
+`;
+function Circle({ bgColor }: CircleProps) {
+  return <Container bgColor={bgColor} />;
+}
+```
+
+- 코드1과 코드2는 동일하다.
