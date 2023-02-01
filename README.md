@@ -246,3 +246,17 @@ ReactDOM.render(
     - `background-color:${props => props.theme.backgroundColor};`
 
 `즉 ,ThemeProvider에 둘러쌓인 모든 compoenet들은 theme에 접근할 수 있다.`
+
+# 3.0
+
+## TypeScript
+
+- strongly-typed 언어
+  - 프로그래밍 언어가 작동하기 전에 type을 확인한다.
+
+```Typescript
+  const plus = (a:number,b:number) => a+b;
+```
+
+- a와 b에 number가 아니 다른형이 들어가면 에러발생
+- 코드에 에러가 있다면, 프로그램이 작동하기 전에 TypeScript가 에러를 알려준다.
