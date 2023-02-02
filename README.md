@@ -437,3 +437,21 @@ interface 생성 시 props를 required가 아닌 optional로 설정하기
     // text를 props로 받지 못했다면 default text를 사용한다.
   }
 ```
+
+# 3.4
+
+## useState의 타입 설정
+
+```Typescript
+  function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
+  const [value, setValue] = useState<number | string>(0);
+  // useState<number | string>으로 설정하면 value는 number 타입 or string 타입을 원한다는걸 알 수 있다.
+  // useState에 default value [useState(0)]을 설정해도 Typescript가 타입 추측이 가능하다.
+  setValue(2)
+  return (
+    <Container bgColor={bgColor} borderColor={borderColor ?? "white"}>
+      {text}
+    </Container>
+  );
+}
+```
