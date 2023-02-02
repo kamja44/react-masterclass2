@@ -455,3 +455,15 @@ interface 생성 시 props를 required가 아닌 optional로 설정하기
   );
 }
 ```
+
+# 3.5
+
+- onChange의 event는 any 타입이다.
+  - Typescript를 사용할 땐 any 타입을 최대한 배제해야한다.
+  ```Typescript
+  // onChange 이벤트가 Form의 InputElement에 의해서 실행되는것을 알 수 있다.
+    const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+      console.log(event.currentTarget.value);
+      // React를사용할 땐 event의 target이 아닌 event의 currentTarget을 사용한다.
+    };
+  ```
