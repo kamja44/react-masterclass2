@@ -405,3 +405,35 @@ function Circle({ bgColor }: CircleProps) {
 ```
 
 - 코드1과 코드2는 동일하다.
+
+# 3.3
+
+interface 생성 시 props를 required가 아닌 optional로 설정하기
+
+```Typescript
+  interface CircleProps{
+    bgColor: string; // required [component에 bgColor가 없으면 에러 발생]
+    borderColor ?: string; // optional [component에 borderColor가 없어도 에러 발생 x]
+    /*
+    borderColor ?: string 코드는 아래 코드와 동일하다.
+    borderColor : string | undefined;
+    */
+  }
+```
+
+- 값이 NULL이거나 undefined일 경우 기본값 설정
+  - JS ?? 연산자
+    - 왼쪽 피연산자가 NULL이거나 undefined일 때 오른쪽 피연산자를 반환하고, 그렇지 않으면 왼쪽 피연산자를 반환하는 논리연산자이다.
+
+```Typescript
+  interface CircleProps {
+    bgColor: string;
+    borderColor?: string;
+    text ?: string;
+  }
+  function Circle({bgColor, borderColor, text="default text"} : CircleProps){
+    return (<Container bgColor = {bgColor} borderColor={borderColor ?? "white"}>{text}</Container>);
+    // borderColor가 Null 혹은 undefined면 white를 사용한다.
+    // text를 props로 받지 못했다면 default text를 사용한다.
+  }
+```
