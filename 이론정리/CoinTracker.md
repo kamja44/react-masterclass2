@@ -77,3 +77,86 @@ export default Coins;
             - `const {coinId} = useParams<{coinId:string}>();`
         - 해결책 2 (interface)
             - `interface Params {coinId : string;}`<br>`const{coinId} = useParams<Params>();`
+
+# 5.1
+
+CSS setup
+
+## createGlobalStyle
+
+- 렌더링 될 때 createGlobalStyle property를 사용한 컴포넌트는 전역 스코프에 스타일을 올리 수 있다.
+- createGlobalStyle porperty는 styled-components 패키지에 들어있다.
+
+```Javascript
+    import {createGlobalStyle} from "styled-components";
+    const GlobalStyle = createGlobalStyle`
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans   +Pro:wght@300;400&display=swap');
+        font-family: 'Source Sans Pro', sans-serif;
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    `
+    // GlobalStyle을 렌더링하면, 전체 body는 reset.css를 갖게 된다.
+    // 즉, GlobalStyle는 전역 스코프가된다.
+```
+
+## 서로 다른 2개의 component 반환하기
+
+`Fragment`
+
+- Fragment는 유렁 컴포넌트이다.
+
+```Javascript
+    function App(){
+        return(
+            // <></>는 Fragment이다.
+            <>
+                <GlobalStyle />
+                <Router />
+            </>
+        )
+    }
+```
+
+`[Flat UI Color]색상 코드 웹 사이트`
+https://flatuicolors.com/palette/gb
