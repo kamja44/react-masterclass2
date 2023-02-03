@@ -160,3 +160,60 @@ CSS setup
 
 `[Flat UI Color]색상 코드 웹 사이트`
 https://flatuicolors.com/palette/gb
+
+# 5.2
+
+`color: inherit`
+
+- color는 부모에게서 가져온다.(부모의 속성을 따른다.)
+
+`Link Componenet는 렌더 시 HTML의 a태그로 변환된다.`
+
+# 5.3
+
+`max-width: 480px`
+
+- container의 크기를 max-width을 이용하여 제한할 수 있다.
+
+코인 API 불러오기
+
+1. `coin의 interface 설정`
+
+```Typescript
+interface CoinInterface{
+  id: string,
+  name: string,
+  symbol: string,
+  rank: number,
+  is_new: boolean,
+  is_active: boolean,
+  type: string,
+}
+function Coins(){
+    const [coins, setCoins] = useState<CoinInterface[]>([]);
+    // useState를 사용할 때 typeScript의 interface 명시
+}
+```
+
+2. `API에서 데이터 fetch`
+
+```Typescript
+useEffect(() => {
+    (async() => {
+      const response = await (
+        await fetch("https://api.coinpaprika.com/v1/coins")
+      ).json();
+      setCoins(response.slice(0,100));
+    })();
+  }, []);
+```
+
+- ()() -> 즉시실행함수
+
+### JS 배열 자르기[slice]
+
+```Javascript
+const array = [1,2,3,4,5]
+array.slice(0,3)
+// [1,2,3]
+```

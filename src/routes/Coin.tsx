@@ -4,7 +4,6 @@ interface Params {
 }
 function Coin() {
   const { coinId } = useParams<Params>();
-  console.log(coinId);
-  return <h1>Coin</h1>;
+  return <h1>{coinId}</h1>;
 }
 export default Coin;
