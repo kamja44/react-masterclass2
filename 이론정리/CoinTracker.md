@@ -250,3 +250,11 @@ state : {name: 'Bitcoin'}
 Home화면을 거치지 않고 coin detail(Coin.tsx)페이지에 접근할 때 에러발생 <- state가 정의되지 않는 오류 발생
 
 - Home화면을 거치지 않아 API를 fetch하지 못했기 때문
+
+#### js ?. operator(Optional Chaining)
+
+```js
+<Title>{state?.name || "Loading..."}</Title>
+```
+
+`JS의 ?.연산자(optional chaining)는 체인의 각 참조가 유효한지 명시적으로 검증하지 않고, 연결된 객체 체인 내의 속성 값을 읽을 수 있다. 즉, 참조가 누락될 가능서이 있는 경우 연결된 속성으로 접근할 때 사용할 수 있다.`
