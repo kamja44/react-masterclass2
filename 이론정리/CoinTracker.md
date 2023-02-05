@@ -217,3 +217,36 @@ const array = [1,2,3,4,5]
 array.slice(0,3)
 // [1,2,3]
 ```
+
+# 5.4
+
+Link component를 통해 데이터 보내기
+
+```js
+<Link
+    to = {{
+        pathname : `/${coin.id}`,
+        state : {name : coin.name},
+    }}
+>
+```
+
+`react-router-dom 6.0.0 버전 이상에서는 <Link to={} state={} /> 처럼 사용`
+
+### react Router DOM이 보내주는 location object에 접근하기
+
+```js
+import {useLocation} form "react-router-dom";
+const location = useLocation();
+console.log(location);
+/*
+pathname : "/btc-bitcoin"
+state : {name: 'Bitcoin'}
+*/
+```
+
+`Link component에서 state를 통해 보낸 데이터를 useLocation을 이용하면 state 정보를 받아올 수 있다.`
+
+Home화면을 거치지 않고 coin detail(Coin.tsx)페이지에 접근할 때 에러발생 <- state가 정의되지 않는 오류 발생
+
+- Home화면을 거치지 않아 API를 fetch하지 못했기 때문
