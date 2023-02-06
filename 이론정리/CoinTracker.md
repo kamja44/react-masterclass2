@@ -284,3 +284,27 @@ useState({});
 // Typescript로 타입을 지정했다면 위 코드를 아래 코드로 변경
 useState<Type>();
 ```
+
+# 5.7
+
+useEffect를 이용하여 component의 시작에서만 코드를 실행하고 싶은 경우useEffect의 2번째 argument에 []를 사용해야 한다. - useEffect의 2번째 argument([])에 변수를 넣으면 변수가 변경될 때마다 다시 실행된다 - [coinId]일 경우 coinId가 변경될 때마다 useEffect를 재시작한다.
+
+```js
+useEffect(() => {}, []);
+```
+
+## nested router
+
+- router 안에 있는 또 다른 router
+  - 웹 사이트에서 탭을 사용할 때 자주 사용한다.
+
+# 5.8
+
+useRouteMatch - 사용자가 특정한 URL에 있는지의 여부를 알려주게 된다.
+useRouteMatch 사용법
+
+```js
+const priceMatch = useRouteMatch("/:coinId/price");
+```
+
+`priceMatch는 사용자가 /:coinId/price URL에 있는지 확인한다. 사용자가 URL에 있다면 객체를 반환하고 사용자가 URL에 없다면 undefined를 반환한다.`
