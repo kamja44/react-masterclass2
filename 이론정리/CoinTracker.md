@@ -258,3 +258,29 @@ Home화면을 거치지 않고 coin detail(Coin.tsx)페이지에 접근할 때 �
 ```
 
 `JS의 ?.연산자(optional chaining)는 체인의 각 참조가 유효한지 명시적으로 검증하지 않고, 연결된 객체 체인 내의 속성 값을 읽을 수 있다. 즉, 참조가 누락될 가능서이 있는 경우 연결된 속성으로 접근할 때 사용할 수 있다.`
+
+- API를 fetch해온 데이터를 사용할 때 object.key 보단 object?.key를 사용하자
+  - object가 항상 값을 가지고 있지 않기 때문
+
+# 5.6
+
+Object.keys(객체명)
+
+- 객체에 들어있는 key들에 대한 array를 받는다.
+
+Object.keys(객체명).join()
+
+- Array.prototype.join()
+  - 배열의 모든 요소를 연결하여 하나의 문자열로 만든다.
+
+Object.values(temp1)
+
+- 객체에 들어있는 key의 value들을 array로 받는다.
+
+Typescript로 변수들의 타입을 지정해줬다면useState()에서 정의한 기본값은 삭제한다.
+
+```js
+useState({});
+// Typescript로 타입을 지정했다면 위 코드를 아래 코드로 변경
+useState<Type>();
+```
