@@ -447,3 +447,18 @@ const { isLoading: tickersLoading, data: tickersData } = useQuery(
 // isLoading: infoLoading <- useQuery가 반환해주는 isLoading을 infoLoading 이름으로 변경하겠다. 나머지도 마찬가지
 //  () => fetchCoinInfo(coinId) <- fetchCoinInfo 함수를 호출할 때 coinId를 매개변수로 전달하기 위해 함수를 호출하여 매개변수 전달
 ```
+
+# 5.13
+
+APEXCHART.JS
+
+- JS chart library
+
+APEXCHART.JS DOCS
+
+- https://apexcharts.com/
+  npm
+- npm i --save react-apexcharts apexcharts
+  CDN
+- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+- <script src="https://cdn.jsdelivr.net/npm/react-apexcharts"></script>
