@@ -309,7 +309,7 @@ const priceMatch = useRouteMatch("/:coinId/price");
 
 `priceMatch는 사용자가 /:coinId/price URL에 있는지 확인한다. 사용자가 URL에 있다면 객체를 반환하고 사용자가 URL에 없다면 undefined를 반환한다.`
 
-# 5.9
+# 5.9 React Query part 1
 
 React Query 사용법(설정)
 
@@ -382,4 +382,68 @@ const { isLoading, data } = useQuery("allCoins", fetchCoins);
   console.log(coins);
   위 코드는 아래의 코드와 동일하게 동작한다.
   const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
+```
+
+# React Query part 2
+
+react query를 이용하면(useQuery 훅 이용) 화면이 바뀔 때마다 API를 요청하지 않는다.
+
+- react query는 요청한 데이터를 cache에 저장하기 때문
+  - 즉, 화면이 바뀔때마다 cache에 있는 데이터를 읽을 수 있다.
+
+react query는 Devtools를 가지고 있다.
+
+- devtools = 개발자도구
+- react query의 devtools는 render할 수 있는 component이다.
+  - render한 devtools를 import하면 캐시에 있는 query를 볼 수 있다.
+  - reactQueryDevtools를 import하면 화면 좌측 하단에 query를 볼 수 있는 버튼이 생성된다.
+
+App.tsx 파일에서 reactQueryDevtools import
+
+```js
+import { ReactQueryDevtools } from "react-query/devtools";
+return (
+  <>
+    <ReactQueryDevtools initialIsOpen={true} />
+  </>
+);
+```
+
+매개변수가 있는 fetch
+
+1. api.ts파일에서 fetcher함수 작성
+
+```js
+const BASE_URL = `https://api.coinpaprika.com/v1`;
+export function fetchCoinInfo(coinId?: string) {
+  return fetch(`${BASE_URL}/coins/${coinId}`).then((response) => {
+    response.json();
+  });
+}
+export function fetchCoinTickers(coinId?: string) {
+  return fetch(`${BASE_URL}/tickers/${coinId}`).then((response) => {
+    response.json();
+  });
+}
+```
+
+2. Coin.tsx파일에서(react-query를 사용할 곳) useQuery 훅 사용
+
+- useQuery 훅을 사용할 때 첫번째 argument는 고유한 키값을 가져야한다.
+  - react query는 useQuery 훅의 첫 번째 argument(고유한 키값)를 보고 query를 인식한다.
+- React query는 key를 array로 감싸서 표현한다.
+  - Ex) ["allCoins"] (Coins.tsx 파일의 useQuery 훅)
+  - 즉, 첫 번째 argument를 고유한 값을 가지고 있는 배열로 설정한다.
+
+```js
+const { isLoading: infoLoading, data: infoData } = useQuery(
+  ["info", coinId],
+  () => fetchCoinInfo(coinId)
+);
+const { isLoading: tickersLoading, data: tickersData } = useQuery(
+  ["tickers", coinId],
+  () => fetchCoinTickers(coinId)
+);
+// isLoading: infoLoading <- useQuery가 반환해주는 isLoading을 infoLoading 이름으로 변경하겠다. 나머지도 마찬가지
+//  () => fetchCoinInfo(coinId) <- fetchCoinInfo 함수를 호출할 때 coinId를 매개변수로 전달하기 위해 함수를 호출하여 매개변수 전달
 ```
