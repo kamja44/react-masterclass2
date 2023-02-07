@@ -462,3 +462,41 @@ APEXCHART.JS DOCS
   CDN
 - <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 - <script src="https://cdn.jsdelivr.net/npm/react-apexcharts"></script>
+
+# 5.15
+
+useQuery 훅의 3번째 parameter
+
+- 선택적인 Object
+
+```js
+const { isLoading: tickersLoading, data: tickersData } =
+  useQuery <
+  PriceData >
+  (["tickers", coinId],
+  () => fetchCoinTickers(coinId),
+  {
+    refetchInterval: 5000,
+  });
+```
+
+- refetchInterval: 5000 -> 5초마다 query를 refetch한다.
+
+### react-helmet
+
+- component인데 무엇을 render하든 문서의 head로 이동한다.
+- 즉, 문서의 head로 가는 direct link이다.
+  react-helmet 설치
+  npm i react-helmet
+  npm i --save-dev @types/react-helmet
+
+```js
+import { Helmet } from "react-helmet";
+<Helmet>
+  <title>
+    {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
+  </title>
+</Helmet>;
+```
+
+- Helmet component의 내용이 문서의 head로 간다.

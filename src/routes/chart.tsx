@@ -24,11 +24,18 @@ function Chart({ coinId }: ChartProps) {
         "Loading Chart..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
-              name: "Price",
-              data: data?.map((price) => Number(price.close)) as number[],
+              data: data?.map((data) => {
+                return [
+                  data.time_close * 1000,
+                  data.open,
+                  data.high,
+                  data.low,
+                  data.close,
+                ];
+              }) as unknown as number[],
             },
           ]}
           options={{
@@ -38,18 +45,11 @@ function Chart({ coinId }: ChartProps) {
             chart: {
               height: 300,
               width: 500,
+              type: "candlestick",
               toolbar: {
                 show: false,
               },
               background: "transparent",
-            },
-            grid: { show: false },
-            stroke: {
-              curve: "smooth",
-              width: 4,
-            },
-            yaxis: {
-              show: false,
             },
             xaxis: {
               axisBorder: { show: false },
@@ -60,11 +60,20 @@ function Chart({ coinId }: ChartProps) {
                 new Date(price.time_close * 1000).toISOString()
               ),
             },
-            fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
+            grid: { show: false },
+            yaxis: {
+              show: false,
             },
-            colors: ["#0fbcf9"],
+            subtitle: {
+              text: `${coinId}'s Chart`,
+              align: "center",
+              margin: 20,
+              style: {
+                fontSize: "30px",
+                fontWeight: "bold",
+                color: "black",
+              },
+            },
             tooltip: {
               y: {
                 formatter: (value) => `$${value.toFixed(2)}`,
