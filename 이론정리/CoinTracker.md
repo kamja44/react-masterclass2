@@ -308,3 +308,78 @@ const priceMatch = useRouteMatch("/:coinId/price");
 ```
 
 `priceMatch는 사용자가 /:coinId/price URL에 있는지 확인한다. 사용자가 URL에 있다면 객체를 반환하고 사용자가 URL에 없다면 undefined를 반환한다.`
+
+# 5.9
+
+React Query 사용법(설정)
+
+1. React Query 다운로드
+   npm i react-query
+2. 파일 설정
+
+- 아래의 코드를 index.tsx 파일에 설정한다.
+
+```js
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
+root.render(
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </QueryClientProvider>
+);
+```
+
+3. API(fetch)와 관련된 기능을 component들과 분리(api.ts 파일 생성)
+
+- fetcher 함수 생성
+- `fetcher 함수는 반드시 fetch promise를 return해야한다.`
+  api.ts 파일
+
+```js
+export function fetchCoins() {
+  return fetch("https://api.coinpaprika.com/v1/coins").then((response) =>
+    response.json()
+  );
+}
+```
+
+4. react-query를 사용할 곳에서 `useQuery` 훅 사용
+
+- useQuery("arg1","arg2")
+  - arg1은 queryKey 즉, query의 고유식별자이다.
+  - arg2는 사용할 fetcher 함수이다.
+  - useQuery는 isLoading이라고 불리는 boolean 값을 return한다.
+    - 즉, 기존에 사용하던 loading useState를 대체할 수 있다.
+
+`useQuery 훅 동작과정`
+useQuery훅 예제 코드
+
+```js
+const { isLoading, data } = useQuery("allCoins", fetchCoins);
+```
+
+1. useQuery 훅이 fetcher함수 fetchCoins를 호출한다.<br>
+   &nbsp;&nbsp; 1-1. fetcher 함수가 isLoading(로딩중)이라면 react-query가 isLoading을 통해 값을 반환한다.(true or false)
+2. fetcher 함수의 동작이 끝나면 react-query가 isLoading을 통해 값을 반환한다.(true or false)
+3. fetcher 함수의동작이 끝나면 호출한 API의 데이터(JSON 데이터)를 data에 반환한다.
+
+- react-query가 반환한 데이터는 캐시에 저장된다.
+
+```js
+  const [coins, setCoins] = useState<Icoin[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    (async () => {
+      const response = await (
+        await fetch("https://api.coinpaprika.com/v1/coins")
+      ).json();
+      setCoins(response.slice(0, 100));
+      setLoading(false);
+    })();
+  }, []);
+  console.log(coins);
+  위 코드는 아래의 코드와 동일하게 동작한다.
+  const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
+```
