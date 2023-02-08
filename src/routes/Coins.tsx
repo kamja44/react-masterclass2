@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
+import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
@@ -14,8 +19,8 @@ const Header = styled.div`
 `;
 const CoinsList = styled.div``;
 const Coin = styled.div`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
   font-size: 25px;
   margin-bottom: 10px;
   padding: 20px;
@@ -45,8 +50,15 @@ const Img = styled.img`
   height: 35px;
   margin-right: 10px;
 `;
+const DarkLightBtn = styled.button`
+  position: absolute;
+  right: 40vw;
+  width: 80px;
+  border-radius: 10px;
+  height: 30px;
+`;
 
-interface CoinInterface {
+interface Icoin {
   id: string;
   name: string;
   symbol: string;
@@ -55,30 +67,30 @@ interface CoinInterface {
   is_active: boolean;
   type: string;
 }
+
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    (async () => {
-      const response = await (
-        await fetch("https://api.coinpaprika.com/v1/coins")
-      ).json();
-      setCoins(response.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
-  console.log(coins);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+  const isDark = useRecoilValue(isDarkAtom);
+  const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
   return (
     <Container>
+      <Helmet>
+        <title>Coins!!!</title>
+      </Helmet>
       <Header>
         <Title>Coins</Title>
+        <DarkLightBtn onClick={toggleDarkAtom}>
+          {isDark ? "라이트 모드" : "다크 모드"}
+        </DarkLightBtn>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Link
+              key={coin.id}
               to={{
                 pathname: `/${coin.id}`,
                 state: { name: coin.name },
