@@ -501,7 +501,7 @@ import { Helmet } from "react-helmet";
 
 - Helmet component의 내용이 문서의 head로 간다.
 
-# Recoil
+# 6.0 Recoil
 
 - React JS의 state management library
 
@@ -561,3 +561,53 @@ return(
     <button onClick={toggleDark}>Toggle Mode</button>
 )
 ```
+
+# 6.1
+
+`프로퍼티를 하위 컴포넌트에 전달하는 방법`
+
+- 이 방법이 불편하기에 Recoil(status management)을 사용한다.
+
+1. toggle Button을 coin.tsx 파일로 이동
+
+- toggleDark 이벤트와 useState가 없다.
+  - App.tsx에서 Router에 component를 전달한다.(toggleDark = toggleDark)
+
+2. Router.tsx 파일에서 toggleDark compoenet의 type을 정의한다.
+
+```js
+interface toggleDark {
+  toggleDark: () => void;
+  // 아무 argument도 받지 않고, void를 return하는 함수이다.
+}
+```
+
+- toggleDark component는 argument를 받지 않고 아무것도 return 하지 않는다.
+  - 그렇기에 toggleDark의 타입을 () => void로 설정한다.
+
+3. Router function에서 toggleDark 변수를 받아온 후 Coins component에 toggleDark 프로퍼티를 전달한다.
+
+```js
+  function Router({toggleDark}: IRouterProps)
+  <Route path="/">
+    <Coins toggleDark={toggleDark} />
+  </Route>
+```
+
+4. Coins.tsx 파일에서 toggleDark 프로퍼티의 타입을 정의한다.
+
+- 정의한 후 Coins function에 toggleDark 프로퍼티를 전달한다.
+  - toggleDark 프로퍼티 전달 후 button의 이벤트에 toggleDark 프로퍼티를 등록한다.
+
+```js
+interface ICoinsProps {
+  toggleDark: () => void;
+}
+function Coins({toggleDark} : ICoinsProps)
+```
+
+5. Chart.tsx와 Price.tsx 파일도 dark모드인지 light모드인지 알아야 하기에 App.tsx 파일에서 isDark 변수를 전달한다.
+
+- 전달과정은 위의 1~4번과 동일하다.
+
+`global state는 application이 특정 value에 접근할 때 사용한다.`
