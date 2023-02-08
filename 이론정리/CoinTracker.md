@@ -500,3 +500,64 @@ import { Helmet } from "react-helmet";
 ```
 
 - Helmet component의 내용이 문서의 head로 간다.
+
+# Recoil
+
+- React JS의 state management library
+
+# 다크모드/라이트모드 변경 버튼 만들기(state management 없이)
+
+1. ThemeProvider compoenet의 위치를 index.tsx에서 App.tsx로 이동
+   useState 훅을 이용하기 위해 이동
+
+- index.tsx
+
+```js
+<QueryClientProvider client={queryClient}>
+  <App />
+</QueryClientProvider>
+```
+
+- App.tsx
+
+```js
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
+return (
+  <>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Router />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </ThemeProvider>
+  </>
+);
+```
+
+2. theme.ts 파일에서 darkTheme과 lightTheme 생성
+
+```js
+export const darkTheme: DefaultTheme = {
+  bgColor: "#2f3640",
+  textColor: "black",
+  accentColor: "##9c88ff",
+};
+export const lightTheme: DefaultTheme = {
+  bgColor: "whitesmoke",
+  textColor: "black",
+  accentColor: "#9c88ff",
+};
+```
+
+- 생성 후 App.tsx에서 import하기
+
+3. App.tsx 파일에서 theme을 변경할 수 있는 버튼 만들기
+
+```js
+const [isDark, setIsDark] = useState(true);
+const toggleDark = () => setIsDark((current) => !current);
+return(
+  <ThemeProvider theme = {isDark ? darkTheme : lightTheme}>
+    <button onClick={toggleDark}>Toggle Mode</button>
+)
+```

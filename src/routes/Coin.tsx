@@ -125,14 +125,17 @@ const Tabs = styled.div`
 const HomeBtn = styled.button`
   position: absolute;
   right: 37vw;
-  top: 3.3vh;
+  top: 4vh;
   border: none;
   opacity: 1;
-  width: 50px;
+  width: auto;
+  padding: 10px;
   height: 30px;
   font-size: 24px;
   border-radius: 20px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 `;
 const Tab = styled.span<{ isActive: boolean }>`
   text-align: center;

@@ -17,8 +17,8 @@ const Header = styled.div`
 `;
 const CoinsList = styled.div``;
 const Coin = styled.div`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
   font-size: 25px;
   margin-bottom: 10px;
   padding: 20px;
