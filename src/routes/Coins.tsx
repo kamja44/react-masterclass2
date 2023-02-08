@@ -50,6 +50,13 @@ const Img = styled.img`
   height: 35px;
   margin-right: 10px;
 `;
+const DarkLightBtn = styled.button`
+  position: absolute;
+  right: 40vw;
+  width: 80px;
+  border-radius: 10px;
+  height: 30px;
+`;
 
 interface Icoin {
   id: string;
@@ -73,7 +80,9 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>Coins</Title>
-        <button onClick={toggleDarkAtom}>{isDark ? "light" : "dark"}</button>
+        <DarkLightBtn onClick={toggleDarkAtom}>
+          {isDark ? "라이트 모드" : "다크 모드"}
+        </DarkLightBtn>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>

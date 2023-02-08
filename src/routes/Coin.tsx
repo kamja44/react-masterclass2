@@ -13,6 +13,8 @@ import styled from "styled-components";
 import Price from "./price";
 import Chart from "./chart";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 interface Params {
   coinId: string;
 }
@@ -124,18 +126,22 @@ const Tabs = styled.div`
 `;
 const HomeBtn = styled.button`
   position: absolute;
-  right: 37vw;
+  right: 36vw;
   top: 4vh;
-  border: none;
-  opacity: 1;
-  width: auto;
-  padding: 10px;
-  height: 30px;
+  width: 70px;
   font-size: 24px;
-  border-radius: 20px;
+  height: 30px;
+  border-radius: 10px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
+`;
+const DarkLightBtn = styled.button`
+  position: absolute;
+  right: 40.5vw;
+  top: 4vh;
+  width: 80px;
+  border-radius: 10px;
+  height: 30px;
+  cursor: pointer;
 `;
 const Tab = styled.span<{ isActive: boolean }>`
   text-align: center;
@@ -172,6 +178,9 @@ function Coin() {
     // }
   );
   const loading = infoLoading || tickersLoading;
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <Container>
       <Helmet>
@@ -190,6 +199,9 @@ function Coin() {
         >
           <HomeBtn>Home</HomeBtn>
         </Link>
+        <DarkLightBtn onClick={toggleDarkAtom}>
+          {isDark ? "라이트 모드" : "다크 모드"}
+        </DarkLightBtn>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
