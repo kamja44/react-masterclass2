@@ -611,3 +611,85 @@ function Coins({toggleDark} : ICoinsProps)
 - 전달과정은 위의 1~4번과 동일하다.
 
 `global state는 application이 특정 value에 접근할 때 사용한다.`
+
+# 6.2
+
+Recoil
+
+- `value(프로퍼티)가 필요한 component만 value(프로퍼티)를 가질 수 있게 한다.`
+  - 서로 다른 atom(bubble)을 생성하여 value를 atom 안에 저장한다.
+    - 저장한 value가 필요하다면 component가 직접 atom에 연결된다.
+      - 즉, `value가 필요한 component만 value를 가질 수 있다.`
+  - 즉 #6.1 ~ 6.2처럼 프로퍼티를 자식 객체에게 넘겨줄 필요가 없다.
+
+### Recoil 설치
+
+1. npm i recoil
+2. index.tsx를 RecoilRoot로 감싸기
+
+```js
+root.render(
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </RecoilRoot>
+);
+```
+
+3. atom.ts 파일 생성
+
+- atom 파일에는 component가 사용할 value를 저장한다.
+
+```js
+import { atom } from "recoil";
+export const isDarkAtom = atom({
+  key: "isDark",
+  default: false,
+});
+```
+
+- atom function은 2가지 argument를 요구한다
+  - 1. 유일한 key
+  - 2. 기본값
+
+4. value를 사용할 component 연결
+
+- recoil library의 useRecoilValue() 사용
+  - atom의 value를 감지하기 위해서는 useRecoilValue()를 사용한다.
+    App.tsx
+
+```js
+function App() {
+  const isDark = useRecoilValue(isDarkAtom);
+}
+```
+
+- application이 isDarkAtom으로 연결되고, isDarkAtom의 기본값은 false이다.
+
+Chart.tsx, Price.tsx
+
+```js
+const isDark = useRecoilValue(isDarkAtom);
+mode: isDark ? "dark" : "light",
+```
+
+# 6.3
+
+atom 함수는 기본값을 갖고있기에 타입스크립트로 타입을 지정하지 않아도 된다.
+
+### atom의 value 수정 방법
+
+- recoil의 useSetRecoilState()훅을 사용하여 값을 변경할 수 있다.
+  - useSetRecoilState()훅은 setState와 같은 방식으로 동작한다.
+    Coins.ts
+
+```js
+function Coins() {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const isDark = useRecoilValue(isDarkAtom);
+  <button onClick={() => setDarkAtom((prev) => !prev)}>
+    {isDark ? "light" : "dark"}
+  </button>;
+}
+```

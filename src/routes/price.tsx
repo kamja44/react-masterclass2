@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
-
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 interface PriceProps {
   coinId: string;
-  isDark: boolean;
 }
 interface IPrice {
   time_open: number;
@@ -16,11 +16,11 @@ interface IPrice {
   volume: string;
   market_cap: number;
 }
-function Price({ coinId, isDark }: PriceProps) {
+function Price({ coinId }: PriceProps) {
   const { isLoading, data } = useQuery<IPrice[]>(["candle", coinId], () =>
     fetchCoinHistory(coinId)
   );
-
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <div>
       {isLoading ? (

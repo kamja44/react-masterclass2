@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
@@ -58,10 +60,11 @@ interface Icoin {
   is_active: boolean;
   type: string;
 }
-interface ICoinsProps {
-  toggleDark: () => void;
-}
-function Coins({ toggleDark }: ICoinsProps) {
+
+function Coins() {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+  const isDark = useRecoilValue(isDarkAtom);
   const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
   return (
     <Container>
@@ -70,7 +73,7 @@ function Coins({ toggleDark }: ICoinsProps) {
       </Helmet>
       <Header>
         <Title>Coins</Title>
-        <button onClick={toggleDark}>Toggle Mode</button>
+        <button onClick={toggleDarkAtom}>{isDark ? "light" : "dark"}</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
