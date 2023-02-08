@@ -250,3 +250,446 @@ state : {name: 'Bitcoin'}
 Home화면을 거치지 않고 coin detail(Coin.tsx)페이지에 접근할 때 에러발생 <- state가 정의되지 않는 오류 발생
 
 - Home화면을 거치지 않아 API를 fetch하지 못했기 때문
+
+#### js ?. operator(Optional Chaining)
+
+```js
+<Title>{state?.name || "Loading..."}</Title>
+```
+
+`JS의 ?.연산자(optional chaining)는 체인의 각 참조가 유효한지 명시적으로 검증하지 않고, 연결된 객체 체인 내의 속성 값을 읽을 수 있다. 즉, 참조가 누락될 가능서이 있는 경우 연결된 속성으로 접근할 때 사용할 수 있다.`
+
+- API를 fetch해온 데이터를 사용할 때 object.key 보단 object?.key를 사용하자
+  - object가 항상 값을 가지고 있지 않기 때문
+
+# 5.6
+
+Object.keys(객체명)
+
+- 객체에 들어있는 key들에 대한 array를 받는다.
+
+Object.keys(객체명).join()
+
+- Array.prototype.join()
+  - 배열의 모든 요소를 연결하여 하나의 문자열로 만든다.
+
+Object.values(temp1)
+
+- 객체에 들어있는 key의 value들을 array로 받는다.
+
+Typescript로 변수들의 타입을 지정해줬다면useState()에서 정의한 기본값은 삭제한다.
+
+```js
+useState({});
+// Typescript로 타입을 지정했다면 위 코드를 아래 코드로 변경
+useState<Type>();
+```
+
+# 5.7
+
+useEffect를 이용하여 component의 시작에서만 코드를 실행하고 싶은 경우useEffect의 2번째 argument에 []를 사용해야 한다. - useEffect의 2번째 argument([])에 변수를 넣으면 변수가 변경될 때마다 다시 실행된다 - [coinId]일 경우 coinId가 변경될 때마다 useEffect를 재시작한다.
+
+```js
+useEffect(() => {}, []);
+```
+
+## nested router
+
+- router 안에 있는 또 다른 router
+  - 웹 사이트에서 탭을 사용할 때 자주 사용한다.
+
+# 5.8
+
+useRouteMatch - 사용자가 특정한 URL에 있는지의 여부를 알려주게 된다.
+useRouteMatch 사용법
+
+```js
+const priceMatch = useRouteMatch("/:coinId/price");
+```
+
+`priceMatch는 사용자가 /:coinId/price URL에 있는지 확인한다. 사용자가 URL에 있다면 객체를 반환하고 사용자가 URL에 없다면 undefined를 반환한다.`
+
+# 5.9 React Query part 1
+
+React Query 사용법(설정)
+
+1. React Query 다운로드
+   npm i react-query
+2. 파일 설정
+
+- 아래의 코드를 index.tsx 파일에 설정한다.
+
+```js
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
+root.render(
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </QueryClientProvider>
+);
+```
+
+3. API(fetch)와 관련된 기능을 component들과 분리(api.ts 파일 생성)
+
+- fetcher 함수 생성
+- `fetcher 함수는 반드시 fetch promise를 return해야한다.`
+  api.ts 파일
+
+```js
+export function fetchCoins() {
+  return fetch("https://api.coinpaprika.com/v1/coins").then((response) =>
+    response.json()
+  );
+}
+```
+
+4. react-query를 사용할 곳에서 `useQuery` 훅 사용
+
+- useQuery("arg1","arg2")
+  - arg1은 queryKey 즉, query의 고유식별자이다.
+  - arg2는 사용할 fetcher 함수이다.
+  - useQuery는 isLoading이라고 불리는 boolean 값을 return한다.
+    - 즉, 기존에 사용하던 loading useState를 대체할 수 있다.
+
+`useQuery 훅 동작과정`
+useQuery훅 예제 코드
+
+```js
+const { isLoading, data } = useQuery("allCoins", fetchCoins);
+```
+
+1. useQuery 훅이 fetcher함수 fetchCoins를 호출한다.<br>
+   &nbsp;&nbsp; 1-1. fetcher 함수가 isLoading(로딩중)이라면 react-query가 isLoading을 통해 값을 반환한다.(true or false)
+2. fetcher 함수의 동작이 끝나면 react-query가 isLoading을 통해 값을 반환한다.(true or false)
+3. fetcher 함수의동작이 끝나면 호출한 API의 데이터(JSON 데이터)를 data에 반환한다.
+
+- react-query가 반환한 데이터는 캐시에 저장된다.
+
+```js
+  const [coins, setCoins] = useState<Icoin[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    (async () => {
+      const response = await (
+        await fetch("https://api.coinpaprika.com/v1/coins")
+      ).json();
+      setCoins(response.slice(0, 100));
+      setLoading(false);
+    })();
+  }, []);
+  console.log(coins);
+  위 코드는 아래의 코드와 동일하게 동작한다.
+  const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
+```
+
+# React Query part 2
+
+react query를 이용하면(useQuery 훅 이용) 화면이 바뀔 때마다 API를 요청하지 않는다.
+
+- react query는 요청한 데이터를 cache에 저장하기 때문
+  - 즉, 화면이 바뀔때마다 cache에 있는 데이터를 읽을 수 있다.
+
+react query는 Devtools를 가지고 있다.
+
+- devtools = 개발자도구
+- react query의 devtools는 render할 수 있는 component이다.
+  - render한 devtools를 import하면 캐시에 있는 query를 볼 수 있다.
+  - reactQueryDevtools를 import하면 화면 좌측 하단에 query를 볼 수 있는 버튼이 생성된다.
+
+App.tsx 파일에서 reactQueryDevtools import
+
+```js
+import { ReactQueryDevtools } from "react-query/devtools";
+return (
+  <>
+    <ReactQueryDevtools initialIsOpen={true} />
+  </>
+);
+```
+
+매개변수가 있는 fetch
+
+1. api.ts파일에서 fetcher함수 작성
+
+```js
+const BASE_URL = `https://api.coinpaprika.com/v1`;
+export function fetchCoinInfo(coinId?: string) {
+  return fetch(`${BASE_URL}/coins/${coinId}`).then((response) => {
+    response.json();
+  });
+}
+export function fetchCoinTickers(coinId?: string) {
+  return fetch(`${BASE_URL}/tickers/${coinId}`).then((response) => {
+    response.json();
+  });
+}
+```
+
+2. Coin.tsx파일에서(react-query를 사용할 곳) useQuery 훅 사용
+
+- useQuery 훅을 사용할 때 첫번째 argument는 고유한 키값을 가져야한다.
+  - react query는 useQuery 훅의 첫 번째 argument(고유한 키값)를 보고 query를 인식한다.
+- React query는 key를 array로 감싸서 표현한다.
+  - Ex) ["allCoins"] (Coins.tsx 파일의 useQuery 훅)
+  - 즉, 첫 번째 argument를 고유한 값을 가지고 있는 배열로 설정한다.
+
+```js
+const { isLoading: infoLoading, data: infoData } = useQuery(
+  ["info", coinId],
+  () => fetchCoinInfo(coinId)
+);
+const { isLoading: tickersLoading, data: tickersData } = useQuery(
+  ["tickers", coinId],
+  () => fetchCoinTickers(coinId)
+);
+// isLoading: infoLoading <- useQuery가 반환해주는 isLoading을 infoLoading 이름으로 변경하겠다. 나머지도 마찬가지
+//  () => fetchCoinInfo(coinId) <- fetchCoinInfo 함수를 호출할 때 coinId를 매개변수로 전달하기 위해 함수를 호출하여 매개변수 전달
+```
+
+# 5.13
+
+APEXCHART.JS
+
+- JS chart library
+
+APEXCHART.JS DOCS
+
+- https://apexcharts.com/
+  npm
+- npm i --save react-apexcharts apexcharts
+  CDN
+- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+- <script src="https://cdn.jsdelivr.net/npm/react-apexcharts"></script>
+
+# 5.15
+
+useQuery 훅의 3번째 parameter
+
+- 선택적인 Object
+
+```js
+const { isLoading: tickersLoading, data: tickersData } =
+  useQuery <
+  PriceData >
+  (["tickers", coinId],
+  () => fetchCoinTickers(coinId),
+  {
+    refetchInterval: 5000,
+  });
+```
+
+- refetchInterval: 5000 -> 5초마다 query를 refetch한다.
+
+### react-helmet
+
+- component인데 무엇을 render하든 문서의 head로 이동한다.
+- 즉, 문서의 head로 가는 direct link이다.
+  react-helmet 설치
+  npm i react-helmet
+  npm i --save-dev @types/react-helmet
+
+```js
+import { Helmet } from "react-helmet";
+<Helmet>
+  <title>
+    {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
+  </title>
+</Helmet>;
+```
+
+- Helmet component의 내용이 문서의 head로 간다.
+
+# 6.0 Recoil
+
+- React JS의 state management library
+
+# 다크모드/라이트모드 변경 버튼 만들기(state management 없이)
+
+1. ThemeProvider compoenet의 위치를 index.tsx에서 App.tsx로 이동
+   useState 훅을 이용하기 위해 이동
+
+- index.tsx
+
+```js
+<QueryClientProvider client={queryClient}>
+  <App />
+</QueryClientProvider>
+```
+
+- App.tsx
+
+```js
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme";
+return (
+  <>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Router />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </ThemeProvider>
+  </>
+);
+```
+
+2. theme.ts 파일에서 darkTheme과 lightTheme 생성
+
+```js
+export const darkTheme: DefaultTheme = {
+  bgColor: "#2f3640",
+  textColor: "black",
+  accentColor: "##9c88ff",
+};
+export const lightTheme: DefaultTheme = {
+  bgColor: "whitesmoke",
+  textColor: "black",
+  accentColor: "#9c88ff",
+};
+```
+
+- 생성 후 App.tsx에서 import하기
+
+3. App.tsx 파일에서 theme을 변경할 수 있는 버튼 만들기
+
+```js
+const [isDark, setIsDark] = useState(true);
+const toggleDark = () => setIsDark((current) => !current);
+return(
+  <ThemeProvider theme = {isDark ? darkTheme : lightTheme}>
+    <button onClick={toggleDark}>Toggle Mode</button>
+)
+```
+
+# 6.1
+
+`프로퍼티를 하위 컴포넌트에 전달하는 방법`
+
+- 이 방법이 불편하기에 Recoil(status management)을 사용한다.
+
+1. toggle Button을 coin.tsx 파일로 이동
+
+- toggleDark 이벤트와 useState가 없다.
+  - App.tsx에서 Router에 component를 전달한다.(toggleDark = toggleDark)
+
+2. Router.tsx 파일에서 toggleDark compoenet의 type을 정의한다.
+
+```js
+interface toggleDark {
+  toggleDark: () => void;
+  // 아무 argument도 받지 않고, void를 return하는 함수이다.
+}
+```
+
+- toggleDark component는 argument를 받지 않고 아무것도 return 하지 않는다.
+  - 그렇기에 toggleDark의 타입을 () => void로 설정한다.
+
+3. Router function에서 toggleDark 변수를 받아온 후 Coins component에 toggleDark 프로퍼티를 전달한다.
+
+```js
+  function Router({toggleDark}: IRouterProps)
+  <Route path="/">
+    <Coins toggleDark={toggleDark} />
+  </Route>
+```
+
+4. Coins.tsx 파일에서 toggleDark 프로퍼티의 타입을 정의한다.
+
+- 정의한 후 Coins function에 toggleDark 프로퍼티를 전달한다.
+  - toggleDark 프로퍼티 전달 후 button의 이벤트에 toggleDark 프로퍼티를 등록한다.
+
+```js
+interface ICoinsProps {
+  toggleDark: () => void;
+}
+function Coins({toggleDark} : ICoinsProps)
+```
+
+5. Chart.tsx와 Price.tsx 파일도 dark모드인지 light모드인지 알아야 하기에 App.tsx 파일에서 isDark 변수를 전달한다.
+
+- 전달과정은 위의 1~4번과 동일하다.
+
+`global state는 application이 특정 value에 접근할 때 사용한다.`
+
+# 6.2
+
+Recoil
+
+- `value(프로퍼티)가 필요한 component만 value(프로퍼티)를 가질 수 있게 한다.`
+  - 서로 다른 atom(bubble)을 생성하여 value를 atom 안에 저장한다.
+    - 저장한 value가 필요하다면 component가 직접 atom에 연결된다.
+      - 즉, `value가 필요한 component만 value를 가질 수 있다.`
+  - 즉 #6.1 ~ 6.2처럼 프로퍼티를 자식 객체에게 넘겨줄 필요가 없다.
+
+### Recoil 설치
+
+1. npm i recoil
+2. index.tsx를 RecoilRoot로 감싸기
+
+```js
+root.render(
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </RecoilRoot>
+);
+```
+
+3. atom.ts 파일 생성
+
+- atom 파일에는 component가 사용할 value를 저장한다.
+
+```js
+import { atom } from "recoil";
+export const isDarkAtom = atom({
+  key: "isDark",
+  default: false,
+});
+```
+
+- atom function은 2가지 argument를 요구한다
+  - 1. 유일한 key
+  - 2. 기본값
+
+4. value를 사용할 component 연결
+
+- recoil library의 useRecoilValue() 사용
+  - atom의 value를 감지하기 위해서는 useRecoilValue()를 사용한다.
+    App.tsx
+
+```js
+function App() {
+  const isDark = useRecoilValue(isDarkAtom);
+}
+```
+
+- application이 isDarkAtom으로 연결되고, isDarkAtom의 기본값은 false이다.
+
+Chart.tsx, Price.tsx
+
+```js
+const isDark = useRecoilValue(isDarkAtom);
+mode: isDark ? "dark" : "light",
+```
+
+# 6.3
+
+atom 함수는 기본값을 갖고있기에 타입스크립트로 타입을 지정하지 않아도 된다.
+
+### atom의 value 수정 방법
+
+- recoil의 useSetRecoilState()훅을 사용하여 값을 변경할 수 있다.
+  - useSetRecoilState()훅은 setState와 같은 방식으로 동작한다.
+    Coins.ts
+
+```js
+function Coins() {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const isDark = useRecoilValue(isDarkAtom);
+  <button onClick={() => setDarkAtom((prev) => !prev)}>
+    {isDark ? "light" : "dark"}
+  </button>;
+}
+```
